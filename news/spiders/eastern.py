@@ -2,7 +2,7 @@
 import scrapy
 
 from ..items import NewsItem
-
+import dateparser
 
 class EasternSpider(scrapy.Spider):
     name = "eastern"
@@ -15,5 +15,8 @@ class EasternSpider(scrapy.Spider):
         item = NewsItem()
         item['title'] = response.css('.title::text').extract()[0]
         item['content'] = response.css('.story::text').extract()[0]
+        item['date'] = dateparser.parse(response.css('.date::text').extract()[0])
         item['url'] = response.url
+        item['type'] = 'eastern'
+
         yield item
