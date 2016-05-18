@@ -17,6 +17,7 @@ class News(DeclarativeBase):
     title = Column('title', String(200))
     author = Column('author', String(200))
     date_time = Column('date_time', DateTime)
+    region = Column('region', String(100))
     content = Column('content', Text)
     url = Column('url', String(200))
     type = Column('type',String(200))
