@@ -13,7 +13,7 @@ class NewsItem(scrapy.Item):
     # name = scrapy.Field()
     title = scrapy.Field()
     author = scrapy.Field()
-    time = scrapy.Field()
+    date_time = scrapy.Field()
     content = scrapy.Field()
     url = scrapy.Field()
     region = scrapy.Field()

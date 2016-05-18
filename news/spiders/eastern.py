@@ -14,8 +14,8 @@ class EasternSpider(scrapy.Spider):
     def parse(self, response):
         item = NewsItem()
         item['title'] = response.css('.title::text').extract()[0]
-        item['content'] = response.css('.story::text').extract()[0]
-        item['date'] = dateparser.parse(response.css('.date::text').extract()[0])
+        item['content'] = response.css('.story').extract()[0]
+        item['date_time'] = dateparser.parse(response.css('.date::text').extract()[0])
         item['url'] = response.url
         item['type'] = 'eastern'
 

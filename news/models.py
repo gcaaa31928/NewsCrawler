@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, Date, Time
+from sqlalchemy import create_engine, Column, Integer, String, Text, Date, Time, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.engine.url import URL
 import settings
@@ -16,7 +16,7 @@ class News(DeclarativeBase):
     id = Column(Integer, primary_key=True)
     title = Column('title', String(200))
     author = Column('author', String(200))
-    time = Column('time', Time)
+    date_time = Column('date_time', DateTime)
     content = Column('content', Text)
     url = Column('url', String(200))
     type = Column('type',String(200))
