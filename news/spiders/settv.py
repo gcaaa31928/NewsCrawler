@@ -11,12 +11,14 @@ class SettvSpider(scrapy.Spider):
     name = "settv"
     allowed_domains = ["http://www.setn.com"]
     start_urls = (
-        "http://www.setn.com/News.aspx?NewsID=%d" % int(i) for i in range(148002, 148003)
+        "http://www.setn.com/News.aspx?NewsID=%d" % int(i) for i in range(248002, 248003)
     )
+    meta={'dont_redirect': True}
 
     def parse(self, response):
-        # if response.css('.error_404').extract():
-        #     raise CloseSpider('Search Failed')
+        if response.url == 'http://www.setn.com/default.aspx?e=4':
+            raise CloseSpider('Search Failed')
+        print response.url
         item = NewsItem()
         item['title'] = response.css('.title h1::text').extract()[0]
         content = response.css('#Content1').extract()[0]
