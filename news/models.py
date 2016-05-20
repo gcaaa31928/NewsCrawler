@@ -19,7 +19,7 @@ class News(DeclarativeBase):
     date_time = Column('date_time', DateTime)
     region = Column('region', String(100))
     content = Column('content', Text)
-    url = Column('url', String(200))
+    url = Column('url', String(200), unique=True)
     type = Column('type',String(200))
 
 
