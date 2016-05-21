@@ -19,17 +19,7 @@ class UDNSpider(scrapy.Spider):
         table = response.css('#breaknews_body dl dt')
         for row in table:
             url = row.css('dt a::attr("href")').extract()[0]
-            # print response.urljoin(url)
             yield scrapy.Request(response.urljoin(url), callback=self.parse_news)
-        # item = NewsItem()
-        # item['title'] = response.css('.title::text').extract()[0]
-        # content = response.css('.story').extract()[0]
-        # item['region'] = Utility.get_location(content)
-        #
-        # item['content'] = content
-        # item['date_time'] = dateparser.parse(response.css('.date::text').extract()[0])
-        # item['url'] = response.url
-        # item['type'] = 'eastern'
 
     def parse_news(self, response):
         item = NewsItem()
