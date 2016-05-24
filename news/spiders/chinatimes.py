@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy.exceptions import CloseSpider
+
 from news.utililties.utility import Utility
 from ..items import NewsItem
 import dateparser

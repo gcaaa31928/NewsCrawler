@@ -7,6 +7,7 @@
 from sqlalchemy.orm import sessionmaker
 from models import *
 
+
 class NewsPipeline(object):
 
     def __init__(self):
