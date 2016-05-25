@@ -9,16 +9,29 @@ class SettvSpider(scrapy.Spider):
 
 
     name = "settv"
-    allowed_domains = ["http://www.setn.com"]
-    start_urls = (
-        "http://www.setn.com/News.aspx?NewsID=%d" % int(i) for i in range(248002, 248003)
-    )
-    meta={'dont_redirect': True}
+    allowed_domains = ["www.setn.com"]
+    start_urls = [
+        "http://www.setn.com/ViewAll.aspx?PageGroupID=1"
+    ]
 
     def parse(self, response):
+        pages = response.css('.pager a')
+        yield scrapy.Request(response.url, callback=self.parse_page)
+        for page in pages:
+            url = page.css('::attr("href")').extract()[0]
+            yield scrapy.Request(response.urljoin(url), callback=self.parse_page)
+
+
+    def parse_page(self, response):
+        news = response.css('.box ul li')
+        for new in news:
+            url = new.css('a::attr("href")').extract()[0]
+            yield scrapy.Request(response.urljoin(url), callback=self.parse_item)
+
+
+    def parse_item(self, response):
         if response.url == 'http://www.setn.com/default.aspx?e=4':
             raise CloseSpider('Search Failed')
-        print response.url
         item = NewsItem()
         item['title'] = response.css('.title h1::text').extract()[0]
         content = response.css('#Content1').extract()[0]
