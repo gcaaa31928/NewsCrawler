@@ -14,8 +14,13 @@ class UDNSpider(scrapy.Spider):
         "http://udn.com/news/breaknews/1"
     ]
 
-
     def parse(self, response):
+        pagers= response.css('.pagelink a')
+        for pager in pagers:
+            url = pager.css('::attr("href")').extract()[0]
+            yield scrapy.Request(response.urljoin(url), callback=self.parse_page)
+
+    def parse_page(self, response):
         table = response.css('#breaknews_body dl dt')
         for row in table:
             url = row.css('dt a::attr("href")').extract()[0]
