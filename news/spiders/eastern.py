@@ -37,7 +37,7 @@ class EasternSpider(scrapy.Spider):
             item['title'] = titles[0]
             content = response.css('.story').extract()[0]
             item['region'] = Utility.get_location(content)
-
+            item['author'] = Utility.get_reporter_from_eastern(content)
             item['content'] = content
             if response.css('.date::text').extract():
                 item['date_time'] = dateparser.parse(response.css('.date::text').extract()[0])
