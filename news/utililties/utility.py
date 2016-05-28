@@ -24,7 +24,7 @@ class Utility():
         return matches.group(0)
 
     @classmethod
-    def get_reporter_from_eastern(cls, content):
+    def get_author(cls, content):
 
         matches = re.search(u'記者(.+)／.*報導', content)
         if matches is None:

@@ -35,6 +35,7 @@ class SettvSpider(scrapy.Spider):
         item = NewsItem()
         item['title'] = response.css('.title h1::text').extract()[0]
         content = response.css('#Content1').extract()[0]
+        item['author'] = Utility.get_author(content)
         item['region'] = Utility.get_location(content)
 
         item['content'] = content

@@ -34,6 +34,7 @@ class UDNSpider(scrapy.Spider):
 
         item['content'] = content
         item['date_time'] = dateparser.parse(response.css('#story_bady_info h3::text').extract()[0])
+        item['author'] = Utility.get_author(response.css('#story_bady_info h3 span:text').extract()[0])
         item['url'] = response.url
         item['type'] = 'udn'
         yield item
