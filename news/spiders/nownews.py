@@ -26,7 +26,9 @@ class NowNewsSpider(scrapy.Spider):
         item['title'] = response.css('.content-title::text').extract()[0]
         header = response.css('.views-counter::text').extract()[0]
         content = response.css('.body').extract()[0]
+        reporter_content = response.css('.views-counter').extract()[0]
         content = header + content
+        item['author'] = Utility.get_author(reporter_content)
         item['region'] = Utility.get_location(content)
         item['content'] = content
         item['date_time'] = dateparser.parse(response.css('.news-info::text').extract()[0])
