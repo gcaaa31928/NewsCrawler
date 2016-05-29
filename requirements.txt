@@ -2,3 +2,4 @@ scrapy
 SQLAlchemy
 psycopg2
 dateparser
+django
