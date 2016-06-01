@@ -1,0 +1,20 @@
+{
+  "name": "news_backend",
+  "description": "",
+  "main": "index.js",
+  "license": "ISC",
+  "homepage": "https://github.com/gcaaa31928/NewsCrawler",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.6",
+    "angular-route": "^1.5.6",
+    "angular-ui-router": "^0.3.0",
+    "semantic": "semantic-ui#^2.1.8"
+  }
+}
