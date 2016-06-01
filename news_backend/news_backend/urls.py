@@ -16,7 +16,6 @@ Including another URLconf
 from django.conf.urls import url, include, patterns
 from django.contrib import admin
 
-urlpatterns = patterns(
-    '',
-    url(r'^news/', include('news.url'))
-)
+urlpatterns = [
+    url(r'^news/', include('news.urls'))
+]

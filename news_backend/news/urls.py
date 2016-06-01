@@ -1,5 +1,6 @@
 from django.conf.urls import url, patterns
-urlpatterns = patterns(
-    'news.views',
-    url(r'^list/$', 'lists', name='lists')
-)
+app_name = 'news'
+from . import views
+urlpatterns = [
+    url(r'^list/$', views.lists, name='lists')
+]

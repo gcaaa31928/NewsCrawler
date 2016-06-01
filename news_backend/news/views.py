@@ -12,5 +12,6 @@ from news.models import News
 @api_view(['GET'])
 def lists(request):
     news = News.objects.all()
-    serializer = NewSerializer(news)
+    print news[0].date_time + '123'
+    serializer = NewSerializer(news, has_many=True)
     return Response(serializer.data)
