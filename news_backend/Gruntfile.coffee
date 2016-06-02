@@ -7,12 +7,18 @@ module.exports = (grunt) ->
                 dest: 'news_backend/assets/js/script.js'
         copy:
             main:
-                files:[
+                files: [
                     {
                         expand: true,
                         cwd: 'news_backend/src/views',
-                        src:['**'],
-                        dest:'news_backend/assets/views/'
+                        src: ['**'],
+                        dest: 'news_backend/assets/views/'
+                    }
+                    {
+                        expand: true,
+                        cwd: 'news_backend/src/data',
+                        src: ['**'],
+                        dest: 'news_backend/assets/data/'
                     }
                 ]
         watch:
@@ -26,5 +32,5 @@ module.exports = (grunt) ->
     grunt.loadNpmTasks('grunt-contrib-coffee')
     grunt.loadNpmTasks('grunt-contrib-watch')
     grunt.loadNpmTasks('grunt-contrib-copy')
-    grunt.registerTask('default', ['coffee','copy', 'watch'])
+    grunt.registerTask('default', ['coffee', 'copy', 'watch'])
     

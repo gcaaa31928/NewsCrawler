@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "semantic/dist/semantic.min.css" %}">
 </head>
 <body ng-app="newsApp">
-<div ui-view class="container">
+<div ui-view class="container" style="position: absolute; width:100%">
 </div>
 <script src="{% static "angular/angular.min.js" %}"></script>
 <script src="{% static "jquery/dist/jquery.min.js" %}"></script>
@@ -13,6 +13,8 @@
 <script src="{% static "angular-route/angular-route.min.js" %}"></script>
 <script src="{% static "semantic/dist/semantic.min.js" %}"></script>
 <script src="{% static "jquery/dist/jquery.min.js" %}"></script>
+<script src="{% static "d3/d3.min.js" %}"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="{% static "js/script.js" %}"></script>
 </body>
 </html>

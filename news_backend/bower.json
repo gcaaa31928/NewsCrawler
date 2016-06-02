@@ -15,6 +15,7 @@
     "angular": "^1.5.6",
     "angular-route": "^1.5.6",
     "angular-ui-router": "^0.3.0",
-    "semantic": "semantic-ui#^2.1.8"
+    "semantic": "semantic-ui#^2.1.8",
+    "d3": "^3.5.17"
   }
 }
