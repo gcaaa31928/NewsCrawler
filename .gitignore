@@ -17,7 +17,7 @@
 news_backend/node_modules/**/*
 
 news_backend/news_backend/assets/*
-!news_backend/news_backend/assets/views
+
 # Sensitive or high-churn files:
 .idea/dataSources.ids
 .idea/dataSources.xml
