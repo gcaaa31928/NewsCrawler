@@ -20,6 +20,12 @@ module.exports = (grunt) ->
                         src: ['**'],
                         dest: 'news_backend/assets/data/'
                     }
+                    {
+                        expand: true,
+                        cwd: 'news_backend/src/styles',
+                        src: ['**'],
+                        dest: 'news_backend/assets/styles/'
+                    }
                 ]
         watch:
             scripts:
@@ -27,6 +33,9 @@ module.exports = (grunt) ->
                 tasks: ['coffee']
             views:
                 files: ['news_backend/src/views/**']
+                tasks: ['copy']
+            styles:
+                files: ['news_backend/src/styles/**']
                 tasks: ['copy']
     )
     grunt.loadNpmTasks('grunt-contrib-coffee')

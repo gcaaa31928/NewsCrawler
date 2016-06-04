@@ -3,6 +3,8 @@ angular.module('newsApp').factory 'TaiwanService', [
     ($http) ->
         factory = {}
         county_json = "static/data/County.json"
+        height = 400
+        width = 300
         density =
             "臺北市": 9952.60,
             "嘉義市": 4512.66,
@@ -27,7 +29,7 @@ angular.module('newsApp').factory 'TaiwanService', [
             "花蓮縣": 71.96,
             "臺東縣": 63.75
         color = d3.scale.linear().domain([0,10000]).range(["#090","#f00"]);
-        projection = d3.geo.mercator().center([121,24]).scale(6000)
+        projection = d3.geo.mercator()
 
         d3.selection.prototype.moveToFront = () ->
             console.log(this)
@@ -51,7 +53,7 @@ angular.module('newsApp').factory 'TaiwanService', [
 #                $("#density").text(d.density)
 #            )
 
-        d3_render_ping = (lat, lon) ->
+        factory.d3_render_ping = (lat, lon, size = 50, duration = 1500) ->
             if not factory.isRendered
                 console.error('Taiwan is not rendered yet')
                 return
@@ -63,22 +65,21 @@ angular.module('newsApp').factory 'TaiwanService', [
                 r: 15
             ).style(
                 fill: 'steelblue',
-                stroke: 'green',
-                'stroke-width': 10,
+                stroke: 'blue',
+                'stroke-width': 3,
                 'fill-opacity': .5
             )
-            circle.transition().duration(2000).ease('exp').attr('r', 100)
+            circle.transition().duration(duration).ease('exp').attr('r', size)
             d3.selectAll('circle').moveToFront()
 
         d3.json(county_json, (topodata) ->
             features = get_maps_features(topodata)
-            path = d3.geo.path().projection(
-                projection
-            )
+            d3.select("#map").attr("width", width).attr("height", height)
+            projection.scale(4000).center([121, 24]).translate([width/2, height/2])
+            path = d3.geo.path().projection(projection)
             d3.select("svg").selectAll("path").data(features).enter().append("path").attr("d",path)
             d3_render_maps_color(path, features)
             factory.isRendered = true
-            d3_render_ping(25.060843, 121.544125)
         )
         factory
 
