@@ -3,26 +3,28 @@
     <a class="item">Messages </a>
     <a class="item">好友 </a>
 </div>
-<div class="ui grid">
+<div class="ui container grid">
     <div class="ten wide column">
-        <div class="ui large feed">
-            <div class="event">
-                <div class="label">
-                    <img src="/images/avatar/small/elliot.jpg">
-                </div>
+        <div class="ui large custom feed">
+            <div class="event" ng-repeat="report in news">
                 <div class="content">
                     <div class="summary">
                         <a class="user">
-                            Elliot Fu
-                        </a> added you as a friend
-                        <div class="date">
-                            1 Hour Ago
-                        </div>
+                            {{ report.author | newsTypeToName }}
+                        </a>
+                        <a class="report">
+                            {{ report.title }}
+                        </a>
+
                     </div>
                     <div class="meta">
-                        <a class="like">
-                            <i class="like icon"></i> 4 Likes
-                        </a>
+                        <span class="date">
+                            {{ report.date_time | dateFromNow }}
+                        </span>
+                        <span ng-if="report.region != ''">
+                            <i class="pin icon"></i>
+                            {{ report.region }}
+                        </span>
                     </div>
                 </div>
             </div>

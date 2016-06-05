@@ -1,3 +1,16 @@
 body {
     background-color: #FCFCFC ;
 }
+
+.summary > a {
+    cursor: none;
+}
+
+.summary > .report {
+    color: rgba(0,0,0,.87);
+}
+
+.custom.feed {
+    height: 800px;
+    overflow: auto;
+}
