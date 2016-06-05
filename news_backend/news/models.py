@@ -13,4 +13,4 @@ class News(models.Model):
     type = models.CharField(max_length=20, blank=True, default='')
 
     class Meta:
-        ordering = ('date_time',)
+        ordering = ('-date_time',)

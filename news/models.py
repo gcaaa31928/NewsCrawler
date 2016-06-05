@@ -12,7 +12,7 @@ def create_table(engine):
     DeclarativeBase.metadata.create_all(engine)
 
 class News(DeclarativeBase):
-    __tablename__ = "news"
+    __tablename__ = "news_news"
     id = Column(Integer, primary_key=True)
     title = Column('title', String(200))
     author = Column('author', String(200))
