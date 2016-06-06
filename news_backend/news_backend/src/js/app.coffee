@@ -1,4 +1,5 @@
 app = angular.module 'newsApp', [
+    'ngAnimate'
     'ui.router'
     'ngRoute'
     'infinite-scroll'

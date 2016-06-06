@@ -12,5 +12,87 @@ body {
 
 .scrollable {
     height: 800px;
-    overflow: auto;
+    position: relative;
+}
+
+.middle {
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+
+
+
+.event.ng-enter {
+    -webkit-animation: enter 450ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+    animation: enter 450ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+    display: block;
+    position: relative;
+}
+@-webkit-keyframes enter {
+    from {
+        opacity: 0;
+        height: 0px;
+        right: -70px;
+    }
+    75% {
+        right: 15px;
+    }
+    to {
+        opacity: 1;
+        height: 30px;
+        right: 0px;
+    }
+}
+@keyframes enter {
+    from {
+        opacity: 0;
+        height: 0px;
+        right: -70px;
+    }
+    75% {
+        right: 15px;
+    }
+    to {
+        opacity: 1;
+        height: 30px;
+        right: 0px;
+    }
+}
+
+.animate-leave {
+    -webkit-animation: leave 450ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+    animation: leave 450ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+    display: block;
+    position: relative;
+}
+@-webkit-keyframes leave {
+    to {
+        opacity: 0;
+        height: 0px;
+        right: -70px;
+    }
+    25% {
+        right: 15px;
+    }
+    from {
+        opacity: 1;
+        height: 30px;
+        right: 0px;
+    }
+}
+@keyframes leave {
+    to {
+        opacity: 0;
+        height: 0px;
+        right: -70px;
+    }
+    25% {
+        right: 15px;
+    }
+    from {
+        opacity: 1;
+        height: 30px;
+        right: 0px;
+    }
 }

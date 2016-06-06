@@ -2,12 +2,14 @@ angular.module('newsApp').controller('MainCtrl', [
     '$scope'
     'TaiwanService'
     'News'
-    ($scope, TaiwanService, News) ->
+    '$timeout'
+    '$interval'
+    ($scope, TaiwanService, News, $timeout, $interval) ->
         $scope.News = News
         moment.locale('zh-tw');
-        setTimeout(() ->
-            TaiwanService.d3_render_ping(25.060843, 121.544125);
-        , 1000)
+
+        $scope.init = () ->
+            $('#scroll').perfectScrollbar()
 
         News.getLatestNews().then((news) ->
             $scope.news = news
@@ -17,6 +19,19 @@ angular.module('newsApp').controller('MainCtrl', [
             News.getBeforeNews().then((news) ->
                 $scope.news = news
             )
+
+        $scope.hoverMaps = (report) ->
+            TaiwanService.hover_map_to_ping(report.region)
+
+        $interval(() ->
+            News.getLatestNews().then((news)->
+                $scope.news = news
+            )
+        ,5000)
+
+        $timeout(() ->
+            $scope.init()
+        )
 
 ])
 .filter('newsTypeToName', () ->

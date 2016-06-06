@@ -9,7 +9,7 @@ class News(models.Model):
     date_time = models.DateTimeField(blank=False)
     region = models.CharField(max_length=30, blank=True, default='')
     content = models.TextField()
-    url = models.CharField(max_length=100, blank=True, default='', unique=True)
+    url = models.CharField(max_length=300, blank=True, default='', unique=True)
     type = models.CharField(max_length=20, blank=True, default='')
 
     class Meta:

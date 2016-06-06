@@ -1,4 +1,7 @@
 from datetime import datetime
+
+import sys
+from django.db.models import Q
 from django.shortcuts import render
 
 from rest_framework.decorators import api_view
@@ -16,8 +19,10 @@ def lists(request):
     epoch = datetime(1970, 1, 1)
     now = datetime.utcnow()
     after_timestamp = int(request.GET.get('after', (now - epoch).total_seconds()))
+    id = int(request.GET.get('id', 0))
     after_datetime = datetime.utcfromtimestamp(after_timestamp)
-    news = News.objects.filter(date_time__gte=after_datetime)[:int(limit)]
+    query = Q(date_time__gte=after_datetime) & ~Q(pk=id)
+    news = News.objects.filter(query)[:int(limit)]
     # print news[0].date_time + '123'
     serializer = NewSerializer(news, many=True)
     return Response(serializer.data)
@@ -28,10 +33,9 @@ def next_news(request):
     epoch = datetime(1970, 1, 1)
     now = datetime.utcnow()
     before_timestamp = int(request.GET.get('before', (now - epoch).total_seconds()))
+    id = int(request.GET.get('id', 0))
     before_datetime = datetime.utcfromtimestamp(before_timestamp)
-    print before_datetime
-    news = News.objects.filter(date_time__lt=before_datetime)[:int(limit)]
-    # print news[0].date_time + '123'
+    query = Q(date_time__lte=before_datetime) & ~Q(pk=id)
+    news = News.objects.filter(query)[:int(limit)]
     serializer = NewSerializer(news, many=True)
-    print serializer.data
     return Response(serializer.data)

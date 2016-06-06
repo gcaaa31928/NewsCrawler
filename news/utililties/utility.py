@@ -25,8 +25,14 @@ class Utility():
 
     @classmethod
     def get_author(cls, content):
-
         matches = re.search(u'記者(.+)／.*報導', content)
+        if matches is None:
+            return ''
+        return matches.group(1)
+
+    @classmethod
+    def get_apple_author(cls, content):
+        matches = re.search(u'（(.+)／.*報導）', content)
         if matches is None:
             return ''
         return matches.group(1)
