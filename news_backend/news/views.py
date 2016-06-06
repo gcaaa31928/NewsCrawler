@@ -16,7 +16,7 @@ def lists(request):
     epoch = datetime(1970, 1, 1)
     now = datetime.utcnow()
     after_timestamp = int(request.GET.get('after', (now - epoch).total_seconds()))
-    after_datetime = datetime.fromtimestamp(after_timestamp)
+    after_datetime = datetime.utcfromtimestamp(after_timestamp)
     news = News.objects.filter(date_time__gte=after_datetime)[:int(limit)]
     # print news[0].date_time + '123'
     serializer = NewSerializer(news, many=True)
@@ -25,12 +25,13 @@ def lists(request):
 @api_view(['GET'])
 def next_news(request):
     limit = request.GET.get('limit', 10)
-    print datetime.utcnow()
     epoch = datetime(1970, 1, 1)
     now = datetime.utcnow()
     before_timestamp = int(request.GET.get('before', (now - epoch).total_seconds()))
-    before_datetime = datetime.fromtimestamp(before_timestamp)
-    news = News.objects.filter(date_time__lte=before_datetime)[:int(limit)]
+    before_datetime = datetime.utcfromtimestamp(before_timestamp)
+    print before_datetime
+    news = News.objects.filter(date_time__lt=before_datetime)[:int(limit)]
     # print news[0].date_time + '123'
     serializer = NewSerializer(news, many=True)
+    print serializer.data
     return Response(serializer.data)

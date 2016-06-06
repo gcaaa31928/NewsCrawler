@@ -9,6 +9,7 @@ angular.module('newsApp').factory 'News', [
         factory.after_datetime = new Date("2016-06-04").getTime() / 1000
         factory.before_datetime = null
         factory.limit = 50
+        factory.busy = false
 
         factory.handleLatestNews = (data) ->
             if not data or data.length == 0
@@ -20,14 +21,14 @@ angular.module('newsApp').factory 'News', [
             data.reverse()
             for report in data
                 factory.news.unshift(report)
-            if factory.news.length > 50
-                factory.news = factory.news.slice(0, 50)
+            date_time = factory.news[factory.news.length - 1].date_time
+            factory.before_datetime = new Date(date_time).getTime() / 1000
             factory.news
 
         factory.handleBeforeNews = (data) ->
             for report in data
                 factory.news.push(report)
-            date_time = factory.news[factory.news.length -1]
+            date_time = factory.news[factory.news.length - 1].date_time
             factory.before_datetime = new Date(date_time).getTime() / 1000
             factory.news
 
@@ -44,11 +45,14 @@ angular.module('newsApp').factory 'News', [
 
         factory.getBeforeNews = (limit = 15) ->
             $q((resolve, reject) ->
-                $http.get("#{factory.url}/next?limit=#{limit}&before=#{factory.after_datetime}"
-                ).then((response) ->
+                factory.busy = true
+                $http.get("#{factory.url}/next?limit=#{limit}&before=#{factory.before_datetime}")
+                .then((response) ->
                     news = factory.handleBeforeNews(response.data)
+                    factory.busy = false
                     resolve(news)
                 , (response) ->
+                    factory.busy = false
                     reject(response)
                 )
             )

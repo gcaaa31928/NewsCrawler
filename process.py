@@ -1,3 +1,5 @@
+from time import sleep
+
 import scrapy
 from scrapy.utils.project import get_project_settings
 
@@ -11,4 +13,6 @@ process.crawl(ChinaTimesSpider)
 process.crawl(EasternSpider)
 process.crawl(SettvSpider)
 process.crawl(UDNSpider)
-process.start()
+while True:
+    process.start()
+    sleep(10)

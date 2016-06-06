@@ -4,20 +4,25 @@
     <a class="item">好友 </a>
 </div>
 <div class="ui container grid">
-    <div class="ten wide column">
-        <div class="ui large custom feed">
-            <div class="event" ng-repeat="report in news">
-                <div class="content">
-                    <div class="summary">
-                        <a class="user">
-                            {{ report.author | newsTypeToName }}
-                        </a>
-                        <a class="report">
-                            {{ report.title }}
-                        </a>
+    <div class="ten wide column ">
+        <div id="scroll" class="scrollable">
+            <div class="ui large feed"
+                 infinite-scroll="getNextNews()"
+                 infinite-scroll-disabled="News.busy"
+                 infinite-scroll-distance="0"
+                 infinite-scroll-container="'#scroll'">
+                <div class="event" ng-repeat="report in news">
+                    <div class="content">
+                        <div class="summary">
+                            <a class="user">
+                                {{ report.author | newsTypeToName }}
+                            </a>
+                            <a class="report">
+                                {{ report.title }}
+                            </a>
 
-                    </div>
-                    <div class="meta">
+                        </div>
+                        <div class="meta">
                         <span class="date">
                             {{ report.date_time | dateFromNow }}
                         </span>
@@ -25,10 +30,13 @@
                             <i class="pin icon"></i>
                             {{ report.region }}
                         </span>
+                        </div>
                     </div>
                 </div>
+                <div class="ui active inline loader"></div>
             </div>
         </div>
+
     </div>
     <div class="six wide column">
         <svg id="map"></svg>

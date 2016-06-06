@@ -3,6 +3,7 @@ angular.module('newsApp').controller('MainCtrl', [
     'TaiwanService'
     'News'
     ($scope, TaiwanService, News) ->
+        $scope.News = News
         moment.locale('zh-tw');
         setTimeout(() ->
             TaiwanService.d3_render_ping(25.060843, 121.544125);
@@ -10,7 +11,6 @@ angular.module('newsApp').controller('MainCtrl', [
 
         News.getLatestNews().then((news) ->
             $scope.news = news
-            console.log news
         )
 
         $scope.getNextNews = () ->

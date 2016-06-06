@@ -1,6 +1,7 @@
 app = angular.module 'newsApp', [
-    'ui.router',
+    'ui.router'
     'ngRoute'
+    'infinite-scroll'
 ]
 app.config [
     '$stateProvider',

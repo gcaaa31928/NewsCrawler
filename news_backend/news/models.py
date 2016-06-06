@@ -9,8 +9,8 @@ class News(models.Model):
     date_time = models.DateTimeField(blank=False)
     region = models.CharField(max_length=30, blank=True, default='')
     content = models.TextField()
-    url = models.CharField(max_length=100, blank=True, default='')
+    url = models.CharField(max_length=100, blank=True, default='', unique=True)
     type = models.CharField(max_length=20, blank=True, default='')
 
     class Meta:
-        ordering = ('-date_time',)
+        ordering = ('-date_time', 'id')

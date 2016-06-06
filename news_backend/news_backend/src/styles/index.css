@@ -10,7 +10,7 @@ body {
     color: rgba(0,0,0,.87);
 }
 
-.custom.feed {
+.scrollable {
     height: 800px;
     overflow: auto;
 }
