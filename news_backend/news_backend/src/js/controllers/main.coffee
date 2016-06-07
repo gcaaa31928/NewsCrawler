@@ -6,7 +6,7 @@ angular.module('newsApp').controller('MainCtrl', [
     '$interval'
     ($scope, TaiwanService, News, $timeout, $interval) ->
         $scope.News = News
-        $scope.search_key_word = null;
+        $scope.search_key_word = '';
         moment.locale('zh-tw');
 
         $scope.init = () ->
@@ -17,9 +17,14 @@ angular.module('newsApp').controller('MainCtrl', [
         )
 
         $scope.getNextNews = () ->
-            News.getBeforeNews().then((news) ->
-                $scope.news = news
-            )
+            if (News.is_search_mode)
+                News.searchNews($scope.search_key_word).then((news) ->
+                    $scope.news = news
+                )
+            else
+                News.getBeforeNews().then((news) ->
+                    $scope.news = news
+                )
 
         $scope.hoverMaps = (report) ->
             TaiwanService.hover_map_to_ping(report.region)
@@ -33,7 +38,16 @@ angular.module('newsApp').controller('MainCtrl', [
         ,5000)
 
         $scope.$watch('search_key_word', (newValue, oldValue) ->
-            News.searchNews(newValue)
+            if (newValue != '')
+                News.changeSearchMode(true)
+                News.searchNews(newValue).then((news) ->
+                    $scope.news = news
+                )
+            else
+                News.changeSearchMode(false)
+                News.getLatestNews().then((news)->
+                    $scope.news = news
+                )
         )
 
         $timeout(() ->

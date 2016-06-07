@@ -13,14 +13,18 @@ angular.module('newsApp').factory 'News', [
             datetime: null
             id: 0
         factory.search =
-            datetime: null
-            id: 0
+            datetime: parseInt(new Date().getTime() / 1000)
+            id: -1
         factory.before_id
         factory.limit = 50
         factory.busy = false
         factory.is_search_mode = false
+        factory.is_done = false
+        factory.request_limit = 15
 
         factory.handleNews = (data) ->
+            if data.length < factory.request_limit
+                factory.is_done = true
             for report in data
                 if report.author == ""
                     report.author = report.type
@@ -54,13 +58,13 @@ angular.module('newsApp').factory 'News', [
             
         factory.handleSearchNews = (data) ->
             for report in data
-                factory.news.push(report)
+                factory.search_news.push(report)
             data = factory.handleNews(data)
             farest_news = factory.news[factory.news.length - 1]
-            factory.before.datetime = new Date(farest_news.date_time).getTime() / 1000
-            factory.before.id = farest_news.id
+            factory.search.datetime = new Date(farest_news.date_time).getTime() / 1000
+            factory.search.id = farest_news.id
             factory.limit = factory.news.length
-            factory.news
+            factory.search_news
 
         factory.getLatestNews = (limit = 15) ->
             $q((resolve, reject) ->
@@ -90,7 +94,9 @@ angular.module('newsApp').factory 'News', [
         factory.changeSearchMode = (search_mode) ->
             if search_mode
                 factory.is_search_mode = true
-            else 
+                factory.search_news = []
+            else
+                factory.is_search_mode = false
                 factory.search_news = []
             
         factory.searchNews = (keyword, limit = 15) ->
@@ -99,7 +105,7 @@ angular.module('newsApp').factory 'News', [
                 url = "#{factory.url}/search?limit=#{limit}&before=#{factory.search.datetime}&id=#{factory.search.id}"
                 url += "&q=#{keyword}"
                 $http.get(url).then((response) ->
-                    news = factory.handleLatestNews(response.data)
+                    news = factory.handleSearchNews(response.data)
                     resolve(news)
                 , (response) ->
                     reject(response)
