@@ -8,6 +8,7 @@ from twisted.internet import reactor
 from news.spiders import *
 from scrapy.crawler import CrawlerRunner
 
+
 settings = get_project_settings()
 runner = CrawlerRunner(settings)
 runner.crawl(NowNewsSpider)
@@ -15,6 +16,7 @@ runner.crawl(ChinaTimesSpider)
 runner.crawl(EasternSpider)
 runner.crawl(SettvSpider)
 runner.crawl(UDNSpider)
+runner.crawl(AppleDailySpider)
 d = runner.join()
 d.addBoth(lambda _: reactor.stop())
 

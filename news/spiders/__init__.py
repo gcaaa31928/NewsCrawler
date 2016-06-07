@@ -7,3 +7,4 @@ from eastern import EasternSpider
 from nownews import NowNewsSpider
 from settv import SettvSpider
 from udn import UDNSpider
+from appledaily import AppleDailySpider
