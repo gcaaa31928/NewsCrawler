@@ -26,8 +26,8 @@ class NextMagSpider(scrapy.Spider):
         item['date_time'] = dateparser.parse(page.css('.meta-bar time::text').extract()[0])
         item['url'] = response.url
         item['type'] = 'nextmag'
-        content = page.css('article article').extract()[0]
+        content = page.css('.article-body').extract()[0]
         item['content'] = content
-        item['author'] =
+        item['author'] = Utility.get_apple_author(content)
         item['region'] = Utility.get_location(content)
         yield item

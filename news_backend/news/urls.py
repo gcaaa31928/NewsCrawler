@@ -3,5 +3,6 @@ app_name = 'news'
 from . import views
 urlpatterns = [
     url(r'^list/$', views.lists, name='lists'),
-    url(r'^next/$', views.next_news, name='next_news')
+    url(r'^next/$', views.next_news, name='next_news'),
+    url(r'^search/$', views.search, name='search')
 ]

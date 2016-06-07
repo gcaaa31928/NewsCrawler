@@ -12,9 +12,13 @@ angular.module('newsApp').factory 'News', [
         factory.before =
             datetime: null
             id: 0
+        factory.search =
+            datetime: null
+            id: 0
         factory.before_id
         factory.limit = 50
         factory.busy = false
+        factory.is_search_mode = false
 
         factory.handleNews = (data) ->
             for report in data
@@ -47,6 +51,16 @@ angular.module('newsApp').factory 'News', [
             factory.before.id = farest_news.id
             factory.limit = factory.news.length
             factory.news
+            
+        factory.handleSearchNews = (data) ->
+            for report in data
+                factory.news.push(report)
+            data = factory.handleNews(data)
+            farest_news = factory.news[factory.news.length - 1]
+            factory.before.datetime = new Date(farest_news.date_time).getTime() / 1000
+            factory.before.id = farest_news.id
+            factory.limit = factory.news.length
+            factory.news
 
         factory.getLatestNews = (limit = 15) ->
             $q((resolve, reject) ->
@@ -69,6 +83,25 @@ angular.module('newsApp').factory 'News', [
                     resolve(news)
                 , (response) ->
                     factory.busy = false
+                    reject(response)
+                )
+            )
+        
+        factory.changeSearchMode = (search_mode) ->
+            if search_mode
+                factory.is_search_mode = true
+            else 
+                factory.search_news = []
+            
+        factory.searchNews = (keyword, limit = 15) ->
+            factory.is_search_mode = true
+            $q((resolve, reject) ->
+                url = "#{factory.url}/search?limit=#{limit}&before=#{factory.search.datetime}&id=#{factory.search.id}"
+                url += "&q=#{keyword}"
+                $http.get(url).then((response) ->
+                    news = factory.handleLatestNews(response.data)
+                    resolve(news)
+                , (response) ->
                     reject(response)
                 )
             )

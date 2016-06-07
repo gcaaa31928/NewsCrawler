@@ -32,7 +32,7 @@ class Utility():
 
     @classmethod
     def get_apple_author(cls, content):
-        matches = re.search(u'（(.+)／.*報導）', content)
+        matches = re.search(u'（(.{2,6})／.*報導）', content)
         if matches is None:
             return ''
         return matches.group(1)

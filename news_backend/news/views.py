@@ -13,6 +13,11 @@ from news.serializers import NewSerializer
 from news.models import News
 
 
+def get_current_utc_epoch_time():
+    epoch = datetime(1970, 1, 1)
+    now = datetime.utcnow()
+    return (now - epoch).total_seconds()
+
 @api_view(['GET'])
 def lists(request):
     limit = request.GET.get('limit', 10)
@@ -39,3 +44,21 @@ def next_news(request):
     news = News.objects.filter(query)[:int(limit)]
     serializer = NewSerializer(news, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def search(request):
+    limit = request.GET.get('limit', 10)
+    search_words = request.GET.get('q', '')
+    before_timestamp = int(request.GET.get('before', get_current_utc_epoch_time()))
+    id = int(request.GET.get('id', -1))
+    before_datetime = datetime.utcfromtimestamp(before_timestamp)
+
+    query = (Q(date_time__lte=before_datetime) & ~Q(pk=id))
+    query |= Q(title__contains=search_words)
+    query |= Q(author__contains=search_words)
+    query |= Q(content__contains=search_words)
+    query |= Q(region__contains=search_words)
+    news = News.objects.filter(query)[:int(limit)]
+    serializer = NewSerializer(news, many=True)
+    return Response(serializer.data)
+
