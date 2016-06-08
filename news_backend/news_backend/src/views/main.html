@@ -10,7 +10,7 @@
                ng-model-options="{ debounce: 600 }">
         <i class="search link icon"></i>
       </div>
-    </div>ㄔㄩㄡ
+    </div>
   </div>
 </div>
 <div class="ui container grid">
@@ -30,7 +30,7 @@
                             <a class="user">
                                 {{ report.author | newsTypeToName }}
                             </a>
-                            <a class="report">
+                            <a class="report" ng-href="{{ report.url }}" target="_blank">
                                 {{ report.title }}
                             </a>
 
