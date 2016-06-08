@@ -67,12 +67,15 @@ angular.module('newsApp').factory 'News', [
             factory.search_news
 
         factory.getLatestNews = (limit = 15) ->
+            factory.busy = true
             $q((resolve, reject) ->
                 $http.get("#{factory.url}/list?limit=#{limit}&after=#{factory.after.datetime}&id=#{factory.after.id}"
                 ).then((response) ->
                     news = factory.handleLatestNews(response.data)
+                    factory.busy = false
                     resolve(news)
                 , (response) ->
+                    factoy.busy = false
                     reject(response)
                 )
             )

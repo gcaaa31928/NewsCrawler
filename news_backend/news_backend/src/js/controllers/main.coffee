@@ -7,14 +7,11 @@ angular.module('newsApp').controller('MainCtrl', [
     ($scope, TaiwanService, News, $timeout, $interval) ->
         $scope.News = News
         $scope.search_key_word = '';
+        $scope.load_first_data = false
         moment.locale('zh-tw');
 
         $scope.init = () ->
             $('#scroll').perfectScrollbar()
-
-        News.getLatestNews().then((news) ->
-            $scope.news = news
-        )
 
         $scope.getNextNews = () ->
             if (News.is_search_mode)
@@ -32,9 +29,11 @@ angular.module('newsApp').controller('MainCtrl', [
         $interval(() ->
             if (News.is_search_mode)
                 return
-            News.getLatestNews().then((news)->
-                $scope.news = news
-            )
+            if ($scope.load_first_data)
+                News.getLatestNews().then((news)->
+                    $scope.news = news
+                )
+            TaiwanService.getRegionCount()
         ,5000)
 
         $scope.$watch('search_key_word', (newValue, oldValue) ->
@@ -45,7 +44,10 @@ angular.module('newsApp').controller('MainCtrl', [
                 )
             else
                 News.changeSearchMode(false)
-                News.getLatestNews().then((news)->
+
+                # will call first on init
+                News.getLatestNews().then((news) ->
+                    $scope.load_first_data = true
                     $scope.news = news
                 )
         )

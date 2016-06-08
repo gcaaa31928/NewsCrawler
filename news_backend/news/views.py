@@ -43,8 +43,8 @@ def next_news(request):
     before_timestamp = int(request.GET.get('before', (now - epoch).total_seconds()))
     id = int(request.GET.get('id', 0))
     before_datetime = datetime.utcfromtimestamp(before_timestamp)
-    query = Q(date_time__gt=before_datetime) | \
-            (Q(date_time=before_datetime) & Q(id__lt=id))
+    query = Q(date_time__lt=before_datetime) | \
+            (Q(date_time=before_datetime) & Q(id__gt=id))
     news = News.objects.filter(query)[:int(limit)]
     serializer = NewSerializer(news, many=True)
     return Response(serializer.data)
@@ -58,7 +58,7 @@ def search(request):
     id = int(request.GET.get('id', -1))
     before_datetime = datetime.utcfromtimestamp(before_timestamp)
 
-    query = (Q(date_time__lte=before_datetime) & ~Q(pk=id)) & \
+    query = (Q(date_time__lt=before_datetime) | (Q(date_time=before_datetime) & Q(id__gt=id))) & \
             (Q(title__contains=search_words) |
              Q(author__contains=search_words) |
              Q(content__contains=search_words) |

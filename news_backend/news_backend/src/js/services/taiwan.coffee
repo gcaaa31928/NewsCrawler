@@ -1,33 +1,37 @@
 angular.module('newsApp').factory 'TaiwanService', [
     '$http',
-    ($http) ->
+    '$q',
+    'Configuration'
+    ($http, $q, Configuration) ->
         factory = {}
+        factory.max_density = 0
+        factory.url = "#{Configuration.server_end_point}/news"
         county_json = "static/data/County.json"
         height = 400
         width = 300
         density =
-            "臺北市": 9952.60,
-            "嘉義市": 4512.66,
-            "新竹市": 4151.27,
-            "基隆市": 2809.27,
-            "新北市": 1932.91,
-            "桃園市": 1692.09,
-            "臺中市": 1229.62,
-            "彰化縣": 1201.65,
-            "高雄市": 942.97,
-            "臺南市": 860.02,
-            "金門縣": 847.16,
-            "澎湖縣": 802.83,
-            "雲林縣": 545.57,
-            "連江縣": 435.21,
-            "新竹縣": 376.86,
-            "苗栗縣": 311.49,
-            "屏東縣": 305.03,
-            "嘉義縣": 275.18,
-            "宜蘭縣": 213.89,
-            "南投縣": 125.10,
-            "花蓮縣": 71.96,
-            "臺東縣": 63.75
+            "臺北市": 0,
+            "嘉義市": 0,
+            "新竹市": 0,
+            "基隆市": 0,
+            "新北市": 0,
+            "桃園市": 0,
+            "臺中市": 0,
+            "彰化縣": 0,
+            "高雄市": 0,
+            "臺南市": 0,
+            "金門縣": 0,
+            "澎湖縣": 0,
+            "雲林縣": 0,
+            "連江縣": 0,
+            "新竹縣": 0,
+            "苗栗縣": 0,
+            "屏東縣": 0,
+            "嘉義縣": 0,
+            "宜蘭縣": 0,
+            "南投縣": 0,
+            "花蓮縣": 0,
+            "臺東縣": 0
         map_positions =
             "新北市": [121.6739, 24.91571],
             "高雄市": [120.666, 23.01087],
@@ -57,7 +61,14 @@ angular.module('newsApp').factory 'TaiwanService', [
                 if key.indexOf(name) >= 0
                     return value
 
-        color = d3.scale.linear().domain([0,10000]).range(["#090","#f00"]);
+        set_count_on_region = (count, region) ->
+            for key, value of density
+                if region == ""
+                    continue
+                if key.indexOf(region) >= 0
+                    density[key] = count
+                    factory.max_density = Math.max(count, factory.max_density)
+
         projection = d3.geo.mercator()
 
         d3.selection.prototype.moveToFront = () ->
@@ -69,6 +80,7 @@ angular.module('newsApp').factory 'TaiwanService', [
             topojson.feature(topodata, topodata.objects["County"]).features
 
         d3_render_maps_color = (path, features) ->
+            color = d3.scale.linear().domain([0, factory.max_density]).range(["green", "red"])
             for i in [features.length-1..0] by -1
                 features[i].density = density[features[i].properties.C_Name]
             d3.select("svg").selectAll("path").attr({
@@ -121,15 +133,29 @@ angular.module('newsApp').factory 'TaiwanService', [
             d3.selectAll('circle').moveToFront()
 
         d3.json(county_json, (topodata) ->
-            features = get_maps_features(topodata)
+            factory.features = get_maps_features(topodata)
             d3.select("#map").attr("width", width).attr("height", height)
             projection.scale(5000).center([121, 24]).translate([width/2, height/2])
-            path = d3.geo.path().projection(projection)
-            d3.select("svg").selectAll("path").data(features).enter().append("path").attr("d",path)
-            d3_render_maps_color(path, features)
+            factory.path = d3.geo.path().projection(projection)
+            d3.select("svg").selectAll("path").data(factory.features).enter().append("path").attr("d",factory.path)
+            d3_render_maps_color(factory.path, factory.features)
             factory.hover_circle = d3.select("svg").append('circle')
             factory.isRendered = true
         )
+
+        factory.getRegionCount = () ->
+            $q((resolve, reject) ->
+                url = "#{factory.url}/regions/count/"
+                $http.get(url).then((response) ->
+                    for region_data in response.data
+                        set_count_on_region(region_data.total, region_data.region)
+                    d3_render_maps_color(factory.path, factory.features)
+                    resolve()
+                , (response) ->
+                    reject(response)
+                )
+            )
+
         factory
 
 ]
