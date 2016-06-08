@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import sys
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Sum
 from django.shortcuts import render
 
 from rest_framework.decorators import api_view
@@ -27,7 +27,8 @@ def lists(request):
     after_timestamp = int(request.GET.get('after', (now - epoch).total_seconds()))
     id = int(request.GET.get('id', 0))
     after_datetime = datetime.utcfromtimestamp(after_timestamp)
-    query = Q(date_time__gte=after_datetime) & ~Q(pk=id)
+    query = Q(date_time__gt=after_datetime) | \
+            (Q(date_time=after_datetime) & Q(id__lt=id))
     news = News.objects.filter(query)[:int(limit)]
     # print news[0].date_time + '123'
     serializer = NewSerializer(news, many=True)
@@ -42,7 +43,8 @@ def next_news(request):
     before_timestamp = int(request.GET.get('before', (now - epoch).total_seconds()))
     id = int(request.GET.get('id', 0))
     before_datetime = datetime.utcfromtimestamp(before_timestamp)
-    query = Q(date_time__lte=before_datetime) & ~Q(pk=id)
+    query = Q(date_time__gt=before_datetime) | \
+            (Q(date_time=before_datetime) & Q(id__lt=id))
     news = News.objects.filter(query)[:int(limit)]
     serializer = NewSerializer(news, many=True)
     return Response(serializer.data)
@@ -67,7 +69,11 @@ def search(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def count(request):
-    result = News.objects.annotate(total=Count('region')).order_by('-total')
-    print result[0].total
+def count_type(request):
+    result = News.objects.values('type').annotate(total=Count('type')).order_by('-total')
+    return Response(result)
+
+@api_view(['GET'])
+def count_region(request):
+    result = News.objects.values('region').annotate(total=Count('region')).order_by('-total')
     return Response(result)

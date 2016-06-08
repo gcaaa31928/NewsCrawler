@@ -10,7 +10,7 @@ angular.module('newsApp').factory 'News', [
             datetime: new Date("2016-06-04").getTime() / 1000
             id: Number.MAX_SAFE_INTEGER
         factory.before =
-            datetime: null
+            datetime: parseInt(new Date().getTime() / 1000)
             id: 0
         factory.search =
             datetime: parseInt(new Date().getTime() / 1000)

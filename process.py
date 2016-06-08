@@ -17,6 +17,7 @@ runner.crawl(EasternSpider)
 runner.crawl(SettvSpider)
 runner.crawl(UDNSpider)
 runner.crawl(AppleDailySpider)
+runner.crawl(NextMagSpider)
 d = runner.join()
 d.addBoth(lambda _: reactor.stop())
 

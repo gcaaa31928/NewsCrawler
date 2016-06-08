@@ -8,3 +8,4 @@ from nownews import NowNewsSpider
 from settv import SettvSpider
 from udn import UDNSpider
 from appledaily import AppleDailySpider
+from nextmag import NextMagSpider
