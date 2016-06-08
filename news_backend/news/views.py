@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import sys
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.shortcuts import render
 
 from rest_framework.decorators import api_view
@@ -65,3 +65,9 @@ def search(request):
     news = News.objects.filter(query)[:int(limit)]
     serializer = NewSerializer(news, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def count(request):
+    result = News.objects.annotate(total=Count('region')).order_by('-total')
+    print result[0].total
+    return Response(result)
