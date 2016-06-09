@@ -7,13 +7,13 @@ angular.module('newsApp').factory 'TaiwanService', [
         factory.max_density = 0
         factory.url = "#{Configuration.server_end_point}/news"
         county_json = "static/data/County.json"
-        height = 400
-        width = 300
+        height = 600
+        width = 400
         density =
             "臺北市": 0,
             "嘉義市": 0,
             "新竹市": 0,
-            "基隆市": 0,
+            "基隆市": 0,   
             "新北市": 0,
             "桃園市": 0,
             "臺中市": 0,
@@ -135,7 +135,7 @@ angular.module('newsApp').factory 'TaiwanService', [
         d3.json(county_json, (topodata) ->
             factory.features = get_maps_features(topodata)
             d3.select("#map").attr("width", width).attr("height", height)
-            projection.scale(5000).center([121, 24]).translate([width/2, height/2])
+            projection.scale(6000).center([121, 24]).translate([width/2, height/2])
             factory.path = d3.geo.path().projection(projection)
             d3.select("svg").selectAll("path").data(factory.features).enter().append("path").attr("d",factory.path)
             d3_render_maps_color(factory.path, factory.features)
