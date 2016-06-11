@@ -7,7 +7,7 @@ angular.module('newsApp').factory 'TaiwanService', [
         factory.max_density = 0
         factory.url = "#{Configuration.server_end_point}/news"
         county_json = "static/data/County.json"
-        height = 600
+        height = 500
         width = 400
         density =
             "臺北市": 0,
