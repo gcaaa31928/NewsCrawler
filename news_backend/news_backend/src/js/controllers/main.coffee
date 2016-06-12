@@ -1,10 +1,11 @@
 angular.module('newsApp').controller('MainCtrl', [
     '$scope'
     'TaiwanService'
+    'TaiwanBarChart'
     'News'
     '$timeout'
     '$interval'
-    ($scope, TaiwanService, News, $timeout, $interval) ->
+    ($scope, TaiwanService, TaiwanBarChart, News, $timeout, $interval) ->
         $scope.News = News
         $scope.search_key_word = '';
         $scope.load_first_data = false
@@ -34,7 +35,7 @@ angular.module('newsApp').controller('MainCtrl', [
                     $scope.news = news
                 )
             TaiwanService.getRegionCount()
-        ,5000)
+        , 5000)
 
         $scope.$watch('search_key_word', (newValue, oldValue) ->
             if (newValue != '')
@@ -66,7 +67,8 @@ angular.module('newsApp').controller('MainCtrl', [
             when 'nownews' then return '今日新聞'
             when 'settv' then return '三立新聞網'
             when 'udn' then return '聯合新聞網'
-            else return type
+            else
+                return type
 )
 .filter('dateFromNow', () ->
     return (date) ->

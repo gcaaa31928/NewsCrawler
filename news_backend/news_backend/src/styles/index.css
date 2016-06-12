@@ -49,3 +49,11 @@ body {
     width: 150px;
     height: 30px;
 }
+
+#xaxis .domain {
+    fill:none;
+    stroke:#000;
+}
+#xaxis text, #yaxis text {
+    font-size: 12px;
+}

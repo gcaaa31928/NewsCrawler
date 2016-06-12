@@ -2,14 +2,15 @@ angular.module('newsApp').factory 'TaiwanService', [
     '$http',
     '$q',
     'Configuration'
-    ($http, $q, Configuration) ->
+    'TaiwanBarChart'
+    ($http, $q, Configuration, TaiwanBarChart) ->
         factory = {}
         factory.max_density = 0
         factory.url = "#{Configuration.server_end_point}/news"
         county_json = "static/data/County.json"
         height = 500
         width = 400
-        density =
+        factory.density =
             "臺北市": 0,
             "嘉義市": 0,
             "新竹市": 0,
@@ -56,18 +57,21 @@ angular.module('newsApp').factory 'TaiwanService', [
             "澎湖縣": [119.6151, 23.56548],
             "連江縣": [119.5397, 26.19737]
 
+        TaiwanBarChart.init(factory.density)
         find_map_position_by_name = (name) ->
             for key, value of map_positions
                 if key.indexOf(name) >= 0
                     return value
 
         set_count_on_region = (count, region) ->
-            for key, value of density
+            region = region.replace('台', '臺')
+            for key, value of factory.density
                 if region == ""
                     continue
                 if key.indexOf(region) >= 0
-                    density[key] = count
+                    factory.density[key] = count
                     factory.max_density = Math.max(count, factory.max_density)
+                    return
 
         projection = d3.geo.mercator()
 
@@ -82,7 +86,7 @@ angular.module('newsApp').factory 'TaiwanService', [
         d3_render_maps_color = (path, features) ->
             color = d3.scale.linear().domain([0, factory.max_density]).range(["green", "red"])
             for i in [features.length-1..0] by -1
-                features[i].density = density[features[i].properties.C_Name]
+                features[i].density = factory.density[features[i].properties.C_Name]
             d3.select("svg").selectAll("path").attr({
                 "d": path
                 "fill": (d) ->
@@ -90,7 +94,7 @@ angular.module('newsApp').factory 'TaiwanService', [
             })
 #            .on("mouseover", (d) ->
 #                $("#name").text(d.properties.C_Name)
-#                $("#density").text(d.density)
+#                $("#factory.density").text(d.factory.density)
 #            )
 
         factory.d3_render_ping = (lat, lon, size = 50, duration = 1500) ->
@@ -150,6 +154,7 @@ angular.module('newsApp').factory 'TaiwanService', [
                     for region_data in response.data
                         set_count_on_region(region_data.total, region_data.region)
                     d3_render_maps_color(factory.path, factory.features)
+                    TaiwanBarChart.update(factory.density)
                     resolve()
                 , (response) ->
                     reject(response)
