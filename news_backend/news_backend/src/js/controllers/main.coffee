@@ -24,8 +24,8 @@ angular.module('newsApp').controller('MainCtrl', [
                     $scope.news = news
                 )
 
-        $scope.hoverMaps = (report) ->
-            TaiwanService.hover_map_to_ping(report.region)
+#        $scope.hoverMaps = (report) ->
+#            TaiwanService.hover_map_to_ping(report.region)
 
         $interval(() ->
             if (News.is_search_mode)
@@ -34,7 +34,7 @@ angular.module('newsApp').controller('MainCtrl', [
                 News.getLatestNews().then((news)->
                     $scope.news = news
                 )
-            TaiwanService.getRegionCount()
+#            TaiwanService.getRegionCount()
         , 5000)
 
         $scope.$watch('search_key_word', (newValue, oldValue) ->
